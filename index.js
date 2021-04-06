@@ -5,12 +5,17 @@ const colors = require ('colors')
 const express = require ('express')
 const app = express ()
 
+//Interface usando ejs como plug-in do express:
+app.set ('view engine', 'ejs')
+
 app.get ('', (req, res) => {
     res.send('<h1>Pagina principal :P</h1>')
 })
 
 app.get ('/peixes', (req, res) => {
-    res.send('<h1>Vc chegou na rota dos peixes</h1>')
+    // res.send('<h1>Vc chegou na rota dos peixes</h1>')
+    //Modificação usando ejs:
+    res.render('peixes', { nome: req.query.nome})
 })
 
 app.get ('/batatas', (req, res) => {
