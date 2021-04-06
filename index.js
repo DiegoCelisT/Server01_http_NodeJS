@@ -1,4 +1,5 @@
 const http = require ('http') //import do módulo http
+const colors = require ('colors')
 
 const server = http.createServer((req, res) =>{
     if (req.method === 'GET') {
@@ -8,6 +9,7 @@ const server = http.createServer((req, res) =>{
             res.end ('<h1>VC chegou a rota dos peixes</h1>')
         } else if (req.url === '/batatas'){
             res.writeHead (200)
+            req.writeHead (200)
             res.end ('<h1>Vc chegou a rota de batatas :P</h1>')
         } else {
             res.writeHead (404)
@@ -29,4 +31,6 @@ const server = http.createServer((req, res) =>{
     }
 })
 
-server.listen (5000)
+server.listen (5000, function (){
+    console.log('Server funcionando no porto 5000'.rainbow)
+})
