@@ -5,21 +5,42 @@ const colors = require ('colors')
 const express = require ('express')
 const app = express ()
 
+//Usando Sequelize com SQLite:
+const { Sequelize, DataTypes } = require('sequelize');
+const user = require('./models/user');
+
+//Especificação do banco de dados que vai usar-se:
+const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './task-list.db'
+  });
+
+//Importando o arquivo user.js criado com o sequelize-cli
+const User = require ('./models/user');
+
+//Para fazer a conexão entre o modelo e nossa Base de dados:
+const users = User (sequelize, DataTypes);
+
 //Interface usando ejs como plug-in do express:
 app.set ('view engine', 'ejs')
 
 app.get ('', (req, res) => {
-    res.send('<h1>Pagina principal :P</h1>')
+    res.send('<h1>Página principal :P</h1>')
 })
 
 app.get ('/peixes', (req, res) => {
     // res.send('<h1>Vc chegou na rota dos peixes</h1>')
     //Modificação usando ejs:
+    // res.append ("Content-Type", "text/html; charset=utf-8") //Não é necessario com express???????
     res.render('peixes', { nome: req.query.nome})
 })
 
-app.get ('/batatas', (req, res) => {
-    res.send('<h1>Vc chegou na rota das batatas</h1>')
+
+//Editada para retornar registros especificos de nossa Base de dados:
+app.get ('/usuarios', async (req, res) => {
+    const user = await users.findByPk(1) //consulta a base de dados e retorna o valor seguindo o parâmetro da chave primaria (neste caso)
+
+    res.render('usuarios', { nome: user.name, descricao: user.description}) //Agora em vez do nome vir da requisição, vai vir da base de dados
 })
 
 app.post('/', (req, res) => {
